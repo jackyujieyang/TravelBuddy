@@ -1,9 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+  <title>Travel Buddy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 
-<html>
-  <head>
-    <title>My ParseApp site</title>
-  </head>
-  <body>
-    Hello World!
-  </body>
+  <!-- JS Libraries -->
+  <script src="js/lib/respond.js"></script>
+  <script src="js/lib/jquery-1.11.0.min.js"></script>
+  <script src="js/lib/bootstrap.min.js"></script>
+  <script src="js/lib/underscore-min.js"></script>
+  <script src="js/lib/parse-1.2.18.min.js"></script>
+
+</head>
+<body>
+  <div id="fb-root"></div>
+  <script>
+    //Initialize Parse (TravelBuddy)
+    Parse.initialize("xirUUr7t7J9BP46cmlYtLHawTotTtsj2YjtA5e5z", "b7HbxwOvJL3zUFwsZWWN4U8F2p5nvYuqqvEioc1H");
+    //Initialize Facebook
+    window.fbAsyncInit = function() {
+      // init the FB JS SDK
+      Parse.FacebookUtils.init({
+      	appId: '772451966098433', // TravelBuddy
+        channelUrl: '//travelbuddy1.parseapp.com/channel.html', // Channel File
+        //status     : true, // check login status
+        cookie: true, // enable cookies to allow Parse to access the session
+        xfbml: true // parse XFBML
+      });
+    };
+    //Async load FB JS SDK
+    (function(d, debug) {
+      var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement('script');
+      js.id = id;
+      js.async = true;
+      js.src = "http://connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+      ref.parentNode.insertBefore(js, ref);
+    }(document, /*debug*/ false));
+  </script>
+
+  <div id="app">
+  	<!-- Nav_bar -->
+  	<header class="navbar navbar-default" id="top" role="navigation">
+			<div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		    	<button type="button" id="share-plan-toggle" class="navbar-toggle" onclick="router.navigate('plan/new',{trigger:true})">
+		        <span class="glyphicon glyphicon-plus" id="share-plan-glyphicon"></span>
+		      </button>
+		      <a class="navbar-brand" id="logo" href="http://travelbuddy1.parseapp.com/">Travel Buddy</a>
+		    </div>
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		    	<ul class="nav navbar-nav">
+		    		<li class="nav-list-item">
+		    			<button type="button" id="find-fb-friends-btn" class="btn btn-primary" onclick="router.navigate('findWhosNearby',{trigger:true})" data-loading-text="Loading their plans..."><span class="glyphicon glyphicon-user" style="color: white;"></span><span id="find-fb-friends-btn-content">&nbsp;Find Who's Nearby</span></button>
+		    		</li>
+		    		<li class="nav-list-item">
+		    			<button type="button" id="find-nearby-btn" class="btn btn-primary" onclick="router.navigate('chooseLocation',{trigger:true})" data-loading-text="Loading travel buddies"><span class="glyphicon glyphicon-zoom-in" style="color: white;"></span><span id="find-nearby-btn-content">&nbsp;Find Travel Buddies</span></button>
+		    			<!--Find who will be nearby-->
+		    		</li>
+		    	</ul>
+		        <ul class="nav navbar-nav navbar-right">
+			      	<li>
+			      		<button type="button" id="share-plan-btn" class="btn btn-primary" onclick="router.navigate('plan/new',{trigger:true})"><span class="glyphicon glyphicon-plus" style="color: white;"></span><span id="share-plan-btn-content">&nbsp;Share Your Travel Plans!</span></button>
+			      		<!--Share your travel plans!-->
+			      	</li>
+			      	<li>
+			      		<div id="my-account-btn-div">
+			      		</div>
+			      	</li>
+		        </ul>
+		    </div><!-- /.navbar-collapse1 -->
+		</div><!-- /.container-fluid -->
+  	</header>
+
+  	<!-- main canvas of the app -->
+  	<div class="fill">
+  		<div id="map-canvas"></div>
+ 		</div>
+  	</div>
+
+  <!-- Share Your Plan Modal -->
+	<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	</div>
+
+  <!-- Like List Modal :: display a list of people who liked my plan -->
+	<div class="modal fade" id="likelist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	</div>
+
+	<!-- Templates -->
+
+	<!-- Modal Loading Template -->
+	<script type="text/template" id="modal-loading-template">
+		<div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-body" id="share-body">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      		<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+	      </div>
+	    </div>
+	  </div>
+	</script>
+
+	<!-- Login Template -->
+	<script type="text/template" id="login-template">
+		<div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="login-modal-label">Please log in first</h4>
+		      </div>
+		      <div class="modal-body" id="share-body">
+		      	<div class="content">
+		      		<h5>In order to protect the privacy of our users, please please log in first.</h5>
+	      		<div>
+	  					<button type="button" class="btn btn-primary" data-loading-text="Loading..." id="login">Log in with Facebook</button>
+	  				<div>
+	      	</div>
+	      </div>
+	    </div>
+	  </div>
+	</script>
+
+	<!-- Nav_bar Menu Template -->
+	<script type="text/template" id="nav-bar-menu-template">
+	<% if(user){ %>
+		<div id="my-account-btn-img-div">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				<img id="my-account-btn-img" class="img-rounded" alt="Responsive image" src="<%= user.get("imgURL") %>">
+			</a>
+			<ul class="dropdown-menu">
+				<li><a href="#myProfile" id="myProfile-link">My Profile</a></li>
+				<li><a href="#myPlans" id="myPlans-link">My Plans</a></li>
+				<li class="divider"></li>
+	      <li><a href="#logout" style="color: #a3141b" id="logout-link">Log Out</a></li>
+	    </ul>
+		</div>
+	<% } %>
+	</script>
+
+	<!-- Share Plan Template -->
+	<script type="text/template" id="share-plan-template">
+		<div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel"><%= plan.id ? 'Edit your plan':'Share your travel plans!' %></h4>
+	      </div>
+	      <div class="modal-body" id="share-body">
+	      	<div class="content">
+				    <img id="profileImg" alt="Responsive image" class="img-thumbnail" height="100" width="100" src="<%= user.get("imgURL") %>">
+				    <h4 id="name"><%= user.get("firstName") %> <%= user.get("lastName") %></h4>
+				    <form role="form" class="share-plan-form">
+						  <div class="form-group">
+						    <label for="inputLocation">Where are you planning to go?</label>
+						    <p style="font-style: italic;">To ensure that your location correctly shows on the map, please choose from the autocomplete dropdown list</p>
+						    <input type="text" onFocus="geolocate()" class="form-control" id="inputLocation" placeholder="Enter location" value="<%= plan.get && plan.get("markerParent") ? plan.get("markerParent").get("location") : '' %>" >
+						    <% if(plan.id){ %>
+						    <input type="hidden" id="inputID" value="<%= plan.id %>">
+						    <% } %>
+						  </div>
+						  <div id="plan-error" style="display:none; color: red;"></div>
+						  <button type="submit" id="plan-submit-btn" class="btn btn-success" data-loading-text="Submitting">Submit plan</button>
+						</form>  	
+		      </div>
+	      </div>
+	    </div>
+		</div>	
+	</script>
+
+	<!-- Choose Location Template -->
+	<script type="text/template" id="choose-location-template">
+		<a class="location col-md-12 col-sm-12 col-xs-12" href="/#findNearby/<%= plan.get("markerParent").id %>">
+			<div><span class="glyphicon glyphicon-pushpin"></span>&nbsp;&nbsp;<%= plan.get("location") %></div>
+		</a>
+	</script>
+
+	<!-- Summer Plan Template -->
+	<script type="text/template" id="plan-template">
+		<div class="summer-plan col-md-12 col-sm-12 col-xs-12">
+			<div class="div-plan-img col-md-2 col-sm-2 col-xs-4">
+				<div class="div-plan-img-frame">
+					<a href="https://www.facebook.com/profile.php?id=<%= plan.get("parent").get("facebookID") %>" target="_blank">
+						<img class="plan-img" alt="Responsive image" src="<%= plan.get("parent").get("imgURL") %>">
+					</a>
+				</div>
+			</div>
+			<div class="col-md-10 col-sm-10 col-xs-8">
+				<div class="div-plan-name col-md-12 col-sm-12 col-xs-12" style="font-weight: bold;">
+					<a href="https://www.facebook.com/profile.php?id=<%= plan.get("parent").get("facebookID") %>" target="_blank">
+						<%= plan.get("parent").get("firstName") %>
+						<%= plan.get("parent").get("lastName") %>
+					</a>
+				</div>
+				<div class="div-plan-org col-md-12 col-sm-12 col-xs12">
+					<a href="#location/<%= plan.get("markerParent").id %>"><%= plan.get("markerParent").get("location") %></a>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<!-- Summer Plan List Template -->
+	<script type="text/template" id="plan-list-template">
+		<div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="find-neighbors-modal-label"><%= title %></h4>
+	      </div>
+	      <div class="modal-body" id="find-neighbors-body">
+	      	<div class="plan-list row">
+
+	      	</div>
+	      	<% if(id){ %>
+	      	<a href="#new/<%= id %>" class="btn btn-default new-plan">Share my plan at this location</a>
+	      	<% } %>
+	      </div>
+	    </div>
+	  </div>
+	</script>
+
+	<!-- My Profile Template -->
+	<script type="text/template" id="my-profile-template">
+		<div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="my-profile-label"><%= title %></h4>
+	      </div>
+	      <div class="modal-body" id="my-profile-body">
+	      	<div class="content">
+	      		<img id="profileImg" alt="Responsive image" class="img-thumbnail" height="100" width="100" src="<%= user.get("imgURL") %>">
+				    <h4 id="name">Name: <%= user.get("firstName") %> <%= user.get("lastName") %></h4>
+				    <h4 id="name">Email: <%= user.get("email") %></h4>
+				    <button type="button" class="btn btn-primary" onclick="router.navigate('editProfile',{trigger:true})">Edit My Profile</button>
+	      	</div>
+	      </div>
+	    </div>
+	  </div>
+	</script>
+
+	<!-- Edit My Profile Template -->
+	<script type="text/template" id="edit-profile-template">
+		<div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="my-profile-label"><%= title %></h4>
+	      </div>
+	      <div class="modal-body" id="my-profile-body">
+	      	<div class="content">
+	      		<form role="form" class="share-plan-form">
+						  <div class="form-group">
+						    <label for="inputFirstName">First Name</label>
+						    <input type="text" class="form-control" id="first-name" placeholder="<%= user.get("firstName") %>" >
+						    <label for="inputLastName">Last Name</label>
+						    <input type="text" class="form-control" id="last-name" placeholder="<%= user.get("lastName") %>" >
+						    <label for="inputEmail">Email</label>
+						    <input type="email" class="form-control" id="email" placeholder="<%= user.get("email") %>" >
+						  </div>
+							<div class="form-group">          
+		            <label> Profile Picture </label>
+		            <input type="file" id="picture" accept="image/*" capture="camera">
+		          </div>
+						  <button type="submit" id="save-profile" class="btn btn-success" data-loading-text="Saving...">Save Changes</button>
+						</form>
+	      	</div>
+	      </div>
+	    </div>
+	  </div>
+	</script>
+
+	<!-- App Code -->
+  <script src="js/app.js"></script>
+
+</body>
 </html>
+

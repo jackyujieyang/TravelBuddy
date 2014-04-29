@@ -1,0 +1,311 @@
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#app {
+	height: 100%;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color:#3b5998;
+}
+
+.location {
+  color:#a3141b; 
+  font-weight: bold;
+}
+
+.like-plan {
+  color: #3b5998; 
+}
+
+.like-plan-div {
+  margin: 20px auto auto auto;
+}
+
+.fill {
+	top: 52px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	position: absolute;
+	width: auto;
+	height: auto;
+}
+
+#map-canvas {
+	height: 100%;
+	width: 100%;
+	background-color: gray;
+}
+
+#logo {
+	color: #a3141b;
+}
+
+#login {
+	background-color: #a3141b;
+	border-color: #ffffff;
+}
+
+#share-plan-btn,
+#welcome-btn {
+	background-color: #a3141b;
+	border-color: #ffffff;
+	margin: 7px auto auto auto;
+}
+
+#find-fb-friends-btn {
+	background-color: #4c66a4;
+	border-color: #ffffff;
+	margin: 7px auto auto auto;
+}
+
+.new-plan {
+  background-color: #00aeef;
+  border-color: #ffffff;
+  margin: 10px auto auto auto;
+}
+
+.new-plan:link,
+.new-plan:visited,
+.new-plan:active {
+  color: white;
+}
+
+.new-plan:hover {
+  background-color: #2398c9;
+  color: white;
+  border-color: #ffffff;
+}
+
+#find-nearby-btn {
+  background-color: #00aeef;
+  border-color: #ffffff;
+  margin: 7px auto auto auto;
+}
+
+#share-plan-toggle {
+	background-color: #a3141b;
+	border-color: #ffffff;
+}
+
+#share-plan-glyphicon {
+	color: white;
+}
+
+.pac-container {
+    background-color: #FFF;
+    z-index: 20;
+    position: fixed;
+    display: inline-block;
+    float: left;
+}
+
+.modal{
+    z-index: 20;   
+}
+
+.modal-backdrop{
+    z-index: 10;        
+}​
+
+.plan-img {
+	margin: 10px 10px 10px 0px;
+}
+
+.summer-plan,
+.location {
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+.summer-plan:hover {
+	background-color: #eee;
+}
+
+.location:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #999 -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 10px 0;
+}
+
+.div-plan-img-frame {
+	height: 75px;
+	width: 75px;
+	float: left;
+	overflow: hidden;
+}
+
+.plan-img{
+	height: 75px;
+	width: auto;
+}
+
+.summer-plan {
+	display: block;
+	color: #333;
+}
+
+.nav-list-item:hover {
+	color: #555;
+	background-color: #e7e7e7;
+}
+
+.div-about-img-frame {
+	height: 50px;
+	width: 50px;
+	float: left;
+	overflow: hidden;
+}
+
+.about-img{
+	height: 50px;
+	width: auto;
+}
+
+#my-account-btn-img-div {
+	height: 34px;
+	width: 34px;
+	float: left;
+	overflow: hidden;
+}
+
+#my-account-btn-img {
+	height: 34px;
+	width: auto;
+}
+
+#my-account-btn-div {
+	margin: 7px auto auto auto;
+}
+
+.spinner {
+  margin: 10px auto;
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+.spinner-sm {
+  margin: 0px;
+  margin-right:6px;
+  width: 25px;
+  height: 15px;
+  text-align: center;
+  font-size: 5px;
+}
+
+.spinner-sm > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner-sm .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner-sm .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner-sm .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner-sm .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+body .modal-sm {
+    width:350px;
+}
